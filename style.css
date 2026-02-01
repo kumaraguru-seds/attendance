@@ -1,0 +1,441 @@
+:root {
+    --primary: #4f46e5; 
+    --primary-hover: #4338ca;
+    --danger: #ef4444; 
+    --success: #22c55e;
+    --bg: #f3f4f6; 
+    --card-bg: #ffffff; 
+    --text: #1f2937;
+    --border: #e5e7eb;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+.hidden { display: none !important; }
+
+/* --- 1. LOGIN PAGE --- */
+.login-container {
+    display: flex;
+    min-height: 90vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+.login-card h2 {
+    margin-top: 0;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: var(--primary);
+}
+
+/* --- 2. BUTTONS --- */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* --- 3. HEADER & PROFILE --- */
+header {
+    background: var(--card-bg);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-header-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
+.user-text h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.role-badge, .team-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.role-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.team-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    margin-left: 5px;
+}
+
+/* --- 4. DASHBOARD GRIDS --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Member Stats Cards */
+.stats-overview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.percentage-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 5px solid var(--primary);
+}
+
+.big-percent {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+    border-top: 5px solid var(--primary);
+}
+
+.stat-bars {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.stat-item b {
+    display: block;
+    font-size: 1.2rem;
+}
+
+/* --- 5. ATTENDANCE CARDS (Lead View) --- */
+.student-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    border-left: 5px solid transparent;
+}
+
+.student-card.present {
+    border-left-color: var(--success);
+    background: #f0fdf4;
+}
+
+.student-card.absent {
+    border-left-color: var(--danger);
+    background: #fef2f2;
+}
+
+.student-card img {
+    width: 90px;
+    height: 90px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.status-toggles {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.toggle-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.active-p {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.active-ab {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+.reason-input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid var(--danger);
+    border-radius: 6px;
+    display: none;
+    margin: 10px auto 0;
+    box-sizing: border-box;
+}
+
+.student-card.absent .reason-input {
+    display: block;
+}
+
+/* --- 6. DISCUSSION & MINUTES --- */
+.discussion-box {
+    margin-top: 2rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: vertical;
+}
+
+textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* --- 7. HISTORY SECTION --- */
+.history-section {
+    margin-top: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.history-section h3 {
+    margin-top: 0;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.history-item {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 0.95rem;
+}
+
+.history-details {
+    font-size: 0.9rem;
+    color: #555;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* --- 8. ADMIN TABLE --- */
+.filter-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    flex: 1;
+    min-width: 200px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+/* Status Tags */
+.tag-p {
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.tag-ab {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+/* Add this to style.css if you prefer cleaner HTML */
+#user-roll {
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+/* --- 9. MOBILE RESPONSIVE --- */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .user-info {
+        flex-direction: column;
+    }
+
+    .student-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+    }
+}
