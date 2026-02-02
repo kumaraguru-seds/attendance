@@ -17,6 +17,16 @@ body {
     padding: 20px;
     line-height: 1.5;
 }
+     /* Background with dark overlay */
+        body::before {
+            content:"";
+            position:fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: url('background.jpg') no-repeat center center/cover fixed; 
+            filter:brightness(55%); 
+            z-index:-1;
+        }
 
 .hidden { display: none !important; }
 
@@ -52,13 +62,15 @@ body {
 .input-group input {
     width: 100%;
     padding: 12px;
+    padding-right: 45px; 
     border: 2px solid var(--border);
     border-radius: 8px;
-    box-sizing: border-box;
+    box-sizing: border-box; 
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
 }
+
 
 .input-group input:focus {
     border-color: var(--primary);
@@ -150,7 +162,8 @@ header {
 /* --- 4. DASHBOARD GRIDS --- */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* DESKTOP DEFAULT: 4 Columns */
+    grid-template-columns: repeat(4, 1fr); 
     gap: 1.5rem;
 }
 
@@ -206,11 +219,14 @@ header {
 .student-card {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1rem; /* Reduced padding slightly for mobile fit */
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: 0.3s;
     border-left: 5px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .student-card.present {
@@ -224,29 +240,38 @@ header {
 }
 
 .student-card img {
-    width: 90px;
-    height: 90px;
+    width: 70px; /* Smaller image to fit 2 cols better */
+    height: 70px;
     border-radius: 10%;
     object-fit: cover;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     border: 3px solid white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.student-card h3 {
+    margin: 5px 0 2px 0;
+    font-size: 1rem;
+    word-break: break-word; /* Prevent long names breaking layout */
 }
 
 .status-toggles {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin: 15px 0;
+    gap: 8px;
+    margin: 10px 0;
+    width: 100%;
 }
 
 .toggle-btn {
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 6px;
     border: 1px solid var(--border);
     background: white;
     cursor: pointer;
     font-weight: 600;
+    flex: 1; /* Make buttons fill width */
+    max-width: 60px;
 }
 
 .active-p {
@@ -262,13 +287,14 @@ header {
 }
 
 .reason-input {
-    width: 90%;
-    padding: 10px;
+    width: 100%;
+    padding: 8px;
     border: 1px solid var(--danger);
     border-radius: 6px;
     display: none;
-    margin: 10px auto 0;
+    margin-top: 5px;
     box-sizing: border-box;
+    font-size: 0.9em;
 }
 
 .student-card.absent .reason-input {
@@ -308,6 +334,7 @@ textarea:focus {
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden; /* Prevent spillover */
 }
 
 .history-section h3 {
@@ -317,71 +344,36 @@ textarea:focus {
     margin-bottom: 15px;
 }
 
-.history-item {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-}
-
-.history-item:last-child {
-    border-bottom: none;
-}
-
-.history-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: var(--primary);
-    font-size: 0.95rem;
-}
-
-.history-details {
-    font-size: 0.9rem;
-    color: #555;
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 6px;
-}
-
-/* --- 8. ADMIN TABLE --- */
-.filter-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-.filter-input {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    flex: 1;
-    min-width: 200px;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
+/* WRAPPING FIX for tables */
 table {
     width: 100%;
     border-collapse: collapse;
-    white-space: nowrap;
+    white-space: normal; /* Changed from nowrap to normal */
+    table-layout: fixed; /* Helps keep columns manageable */
 }
 
 th, td {
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid #f3f4f6;
+    word-wrap: break-word; /* Ensure text breaks inside cell */
+    overflow-wrap: break-word;
 }
 
 th {
     background: #f9fafb;
     font-weight: 600;
     color: #6b7280;
+}
+
+/* Specific fix for History Table Headers */
+#history-container th {
+    font-size: 0.85em;
+    padding: 8px;
+}
+#history-container td {
+    font-size: 0.9em;
+    padding: 8px;
 }
 
 /* Status Tags */
@@ -403,7 +395,6 @@ th {
     font-weight: 600;
 }
 
-/* Add this to style.css if you prefer cleaner HTML */
 #user-roll {
     font-size: 0.85rem;
     color: #555;
@@ -412,10 +403,29 @@ th {
     letter-spacing: 0.5px;
 }
 
+/* --- 8. ADMIN TABLE (Specific) --- */
+.table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+/* Allow Admin table to still scroll horizontally if needed, but wrap text */
+#admin-table {
+    min-width: 600px; /* Force scroll on very small screens for data density */
+    table-layout: auto; /* Admin table needs flexible widths */
+}
+
 /* --- 9. MOBILE RESPONSIVE --- */
 @media (max-width: 600px) {
     body {
         padding: 10px;
+    }
+
+    /* GRID: 2 Columns on Mobile */
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px;
     }
 
     header {
@@ -429,10 +439,9 @@ th {
         flex-direction: column;
     }
 
-    .student-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /* Make history cards more compact on mobile */
+    .history-section {
+        padding: 1rem;
     }
     
     .filter-group {
