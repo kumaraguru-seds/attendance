@@ -210,3 +210,4 @@ function filterTable() {
     });
     renderTable(filtered);
 }
+
