@@ -3,47 +3,87 @@
 // ==========================================
 var SHEET_ID = "1naIuWPt2MgRQWlX7uDFT8aFij8kH_KttDGjXjcWMzRE"; 
 var ADMIN_EMAILS = ["manilunar07@gmail.com", "manikandan.23ae@kct.ac.in"];
-var LOGO_URL = "https://drive.google.com/uc?export=view&id=1ukhRK5OBA0M5USQs2Jy_WxkECZ6xpiMY";
+var LOGO_URL = "https://drive.google.com/uc?export=view&id=10UKXL9GdS41qubzq8RELeCKvHFJk_17B";
 
 // ==========================================
-// 2. CREATIVE EMAIL TEMPLATE
+// 2. CREATIVE EMAIL TEMPLATE (Professional Edition)
 // ==========================================
 function getEmailHtml(name, title, contentBody, teamName, statusColor) {
-  var color = statusColor || "#0056b3"; // Default Blue
+  var accentColor = statusColor || "#0056b3"; // Main theme color
   return `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { margin: 0; padding: 0; background-color: #f4f6f8; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-    .email-container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    .header { background-color: ${color}; padding: 40px 30px; text-align: center; color: white; }
-    .header img { width: 90px; height: auto; margin-bottom: 15px; border-radius: 50%; background: white; padding: 5px; }
-    .header h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-    .status-badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; font-size: 12px; font-weight: 600; }
-    .content { padding: 40px 35px; color: #4a5568; line-height: 1.8; font-size: 15px; }
-    .greeting { font-size: 18px; color: #2d3748; margin-bottom: 20px; font-weight: 600; }
-    .info-box { background-color: #f7fafc; border-left: 4px solid ${color}; padding: 20px; margin: 25px 0; border-radius: 4px; }
-    .footer { background-color: #edf2f7; padding: 20px; text-align: center; font-size: 12px; color: #718096; border-top: 1px solid #e2e8f0; }
-    .footer a { color: ${color}; text-decoration: none; font-weight: 600; }
+    body { margin: 0; padding: 0; background-color: #f8fafc; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .wrapper { width: 100%; table-layout: fixed; background-color: #f8fafc; padding-bottom: 40px; }
+    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 40px; overflow: hidden; }
+    
+    /* Simplified Logo Section */
+    .brand-header { padding: 30px 40px 10px 40px; text-align: left; }
+    .brand-header img { height: 60px; width: auto; display: block; }
+    
+    .content-header { padding: 0 40px 20px 40px; border-bottom: 1px solid #edf2f7; }
+    .content-header h1 { color: #1a202c; font-size: 22px; margin: 10px 0 5px 0; font-weight: 700; }
+    .team-tag { display: inline-block; color: ${accentColor}; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .body-content { padding: 30px 40px; color: #4a5568; line-height: 1.6; font-size: 16px; }
+    .greeting { font-size: 18px; color: #2d3748; font-weight: 600; margin-bottom: 15px; }
+    
+    /* Professional Info Box */
+    .info-box { background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid ${accentColor}; padding: 20px; margin: 25px 0; border-radius: 4px; }
+    
+    .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #edf2f7; font-size: 14px; }
+    
+    .footer {
+      background-color: #eef3f8;
+      padding: 15px;
+      text-align: center;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .footer a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div class="email-container">
-    <div class="header">
-      <img src="${LOGO_URL}" alt="SEDS Logo">
-      <h1>${title}</h1>
-      <div class="status-badge">${teamName} Team</div>
+  <div class="wrapper">
+    <div class="email-container">
+      <div class="brand-header">
+        <img src="${LOGO_URL}" alt="SEDS Logo">
+      </div>
+      
+      <div class="content-header">
+        <span class="team-tag">SEDS ${teamName}</span>
+        <h1>${title}</h1>
+      </div>
+
+      <div class="body-content">
+        <div class="greeting">Dear ${name},</div>
+        ${contentBody}
+        
+        <div class="signature">
+          <p style="margin:0;">Best regards,</p>
+          <p style="margin:5px 0 0 0; color:#2d3748; font-weight:bold;">Team Lead, SEDS ${teamName}</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Students for the Exploration and Development of Space</p>
+        <div class="footer">
+      Email: <a href="mailto:contact@example.com">seds@kct.ac.in</a> |
+      Website: <a href="https://kumaraguruseds.space/">kumaraguruseds.space</a>
     </div>
-    <div class="content">
-      <div class="greeting">Hello ${name},</div>
-      ${contentBody}
-      <p style="margin-top: 30px;">Best regards,<br><strong>SEDS ${teamName} Lead</strong></p>
-    </div>
-    <div class="footer">
-      <p>Questions? Contact us at <a href="mailto:seds@kct.ac.in">seds@kct.ac.in</a></p>
-      <p><a href="https://www.kumaraguruseds.space">www.kumaraguruseds.space</a></p>
+      </div>
     </div>
   </div>
 </body>
@@ -341,7 +381,7 @@ function getMemberEmail(ss, roll) {
 
 function sendHtmlEmail(to, subject, bodyContent, name, team, color) {
   if (to && to.includes("@")) {
-    try { MailApp.sendEmail({ to: to, subject: subject, htmlBody: getEmailHtml(name, subject, bodyContent, team, color) }); return true; } catch(e) { return false; }
+    try { MailApp.sendEmail({ to: to, subject: subject, name: "SEDS Attendance System", htmlBody: getEmailHtml(name, subject, bodyContent, team, color) }); return true; } catch(e) { return false; }
   }
   return false;
 }
