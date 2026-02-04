@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvpKN52tEZiWQPHTHTHIlVIj49UqmoPgUxqNMRWNJEPWhoYZ6dT2aCNShUrCpcQQJY/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Nyv1MuZFVPAR911MR-UTYIyiFmMlCwDYyGypn-AlDOrvLSf8rZBblxHckqbMIvG2/exec";
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('email').addEventListener('keydown', (e) => {
         if (e.key === "Enter") { e.preventDefault(); document.getElementById('password').focus(); }
@@ -19,18 +19,25 @@ let currentUser = null;
 let teamMembers = [];
 let adminData = [];
 
-// --- LOGIN ---
 async function handleLogin() {
-    const email = document.getElementById('email').value;
+    // This now gets whatever is in the first box (Roll or Email)
+    const usernameInput = document.getElementById('email').value; 
     const pass = document.getElementById('password').value;
     const btn = document.querySelector('.btn-primary');
     const err = document.getElementById('error-msg');
 
-    if(!email || !pass) return;
+    if(!usernameInput || !pass) return;
     btn.innerText = "Authenticating..."; btn.disabled = true; err.innerText = "";
 
     try {
-        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "login", username: email, password: pass }) });
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: JSON.stringify({ 
+                action: "login", 
+                username: usernameInput, // Send the Roll or Email here
+                password: pass 
+            }) 
+        });
         const data = await res.json();
         if (data.status === "success") {
             currentUser = data;
@@ -210,4 +217,5 @@ function filterTable() {
     });
     renderTable(filtered);
 }
+
 
