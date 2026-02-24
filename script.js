@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQfjZ7IEPTUEtATJbM17ZVvTG1FvLKt5sACX8vVfZ9pJDbz5co2lDVx4-ikzS0I7ip/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBMjQB4yL6TpZpCBs7liLl9CM8d2CgwI8Z0EiNWO1sKsbwrOMFAhFhhEKUSlIgXbNT/exec";
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('email').addEventListener('keydown', (e) => {
         if (e.key === "Enter") { e.preventDefault(); document.getElementById('password').focus(); }
