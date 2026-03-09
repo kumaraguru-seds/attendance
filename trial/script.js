@@ -341,44 +341,176 @@ function toggleVenueLabel(mode) {
     }
 }
 
-// Submit to Google Apps Script
-async function submitMeetingSchedule() {
-    const mode = document.querySelector('input[name="meeting-mode"]:checked').value;
-    const btn = document.getElementById('schedule-btn');
+// 1. CONFIGURATION - Update with your Web App URL from Apps Script
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtV5IU7e1IOmYPeW_p5xp-_0-qt3DERu3seL6EYemPBujBgDOEEn6mk6nxudDztP_Kmg/exec"; 
+
+let pendingCancelId = null;
+
+/**
+ * Call this inside your loadLeadDashboard() function to initialize 
+ * the meeting management section.
+ */
+async function initLeadScheduler() {
+    const section = document.getElementById('upcoming-meetings-section');
+    if (section) section.classList.remove('hidden');
     
-    // We take the team directly from currentUser.team for security
+    // Set the team name in the modal display
+    const teamDisplay = document.getElementById('schedule-team-display');
+    if (teamDisplay) teamDisplay.value = currentUser.team;
+    
+    loadUpcomingMeetings();
+}
+
+/**
+ * Fetches and displays meetings specifically for the logged-in team.
+ */
+async function loadUpcomingMeetings() {
+    const listContainer = document.getElementById('upcoming-list');
+    if (!listContainer) return;
+
+    try {
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: JSON.stringify({ action: "getUpcomingMeetings", team: currentUser.team }) 
+        });
+        const data = await res.json();
+        
+        if (!data.meetings || data.meetings.length === 0) {
+            listContainer.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 20px; color: var(--muted);">
+                    No missions scheduled for this orbit.
+                </div>`;
+            return;
+        }
+
+        listContainer.innerHTML = data.meetings.map(m => `
+            <div class="stat-card" style="border-top: 3px solid var(--accent); text-align: left; position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: white;">📅 ${m.date}</span>
+                    <button onclick="openCancelPopup(${m.rowId})" 
+                            style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:11px; letter-spacing:1px;">
+                        ABORT
+                    </button>
+                </div>
+                <div style="margin: 10px 0; font-size: 0.85rem;">
+                    <b style="color:var(--accent)">🕒 ${m.start} - ${m.end}</b><br>
+                    <b style="color:var(--muted)">📍 ${m.venue} (${m.mode})</b>
+                </div>
+                <p style="font-size: 0.75rem; opacity:0.8; border-top:1px solid var(--border); padding-top:8px; line-height:1.4;">
+                    ${m.agenda}
+                </p>
+            </div>
+        `).join('');
+    } catch (e) { 
+        listContainer.innerHTML = "<p style='color: var(--danger);'>Sync Error: Failed to reach HQ.</p>"; 
+    }
+}
+
+/**
+ * Handles the submission of a new meeting.
+ */
+async function submitMeetingSchedule() {
+    const btn = document.getElementById('schedule-btn');
     const meetingData = {
         action: "scheduleMeeting",
-        team: currentUser.team, 
-        mode: mode,
+        team: currentUser.team,
+        mode: document.querySelector('input[name="meeting-mode"]:checked').value,
         date: document.getElementById('schedule-date').value,
-        time: document.getElementById('schedule-time').value,
+        startTime: document.getElementById('schedule-start-time').value,
+        endTime: document.getElementById('schedule-end-time').value,
         venue: document.getElementById('schedule-venue').value,
         agenda: document.getElementById('schedule-agenda').value,
         scheduledBy: currentUser.name
     };
 
-    btn.innerText = "Processing...";
+    btn.innerText = "Syncing with HQ...";
     btn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(meetingData)
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: JSON.stringify(meetingData) 
+        });
+        const data = await res.json();
+
+        if (data.status === "success") {
+            toggleMeetingModal(false); // Close modal
+            document.getElementById('meeting-form').reset();
+            loadUpcomingMeetings(); // Refresh the list
+        } else {
+            // This displays the "already scheduled" error from Apps Script
+            alert("⚠️ Mission Blocked: " + data.message);
+        }
+    } catch (e) { 
+        alert("Network Error: Could not log mission."); 
+    } finally {
+        btn.innerText = "Confirm Schedule";
+        btn.disabled = false;
+    }
+}
+
+/**
+ * Popup Control Logic
+ */
+function openCancelPopup(rowId) {
+    pendingCancelId = rowId;
+    const popup = document.getElementById('cancel-popup');
+    if (popup) popup.classList.remove('hidden');
+}
+
+function closeCancelPopup() {
+    pendingCancelId = null;
+    const popup = document.getElementById('cancel-popup');
+    if (popup) popup.classList.add('hidden');
+}
+
+async function executeCancellation() {
+    if (!pendingCancelId) return;
+
+    const btn = document.getElementById('confirm-abort-btn');
+    const originalText = btn.innerText;
+    
+    btn.innerText = "Processing Abort...";
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: JSON.stringify({ action: "cancelMeeting", rowId: pendingCancelId }) 
         });
         const data = await res.json();
         
         if (data.status === "success") {
-            alert("Success! Meeting scheduled.");
-            toggleMeetingModal(false);
-            document.getElementById('meeting-form').reset();
-        } else {
-            alert("System Error: " + data.message);
+            closeCancelPopup();
+            loadUpcomingMeetings();
         }
-    } catch (e) {
-        alert("Network Error. Check your connection.");
+    } catch (e) { 
+        alert("Failed to cancel mission. Please check connection."); 
     } finally {
-        btn.innerText = "Confirm Schedule";
+        btn.innerText = originalText;
         btn.disabled = false;
+    }
+}
+
+/**
+ * Global Listeners
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const abortBtn = document.getElementById('confirm-abort-btn');
+    if (abortBtn) {
+        abortBtn.addEventListener('click', executeCancellation);
+    }
+});
+
+// Helper for Venue Label Toggling
+function toggleVenueLabel(mode) {
+    const label = document.getElementById('venue-label');
+    const input = document.getElementById('schedule-venue');
+    if (mode === 'Online') {
+        label.innerText = "Meeting Link";
+        input.placeholder = "e.g. Google Meet / Zoom Link";
+    } else {
+        label.innerText = "Venue";
+        input.placeholder = "e.g. Aero Seminar Hall";
     }
 }
