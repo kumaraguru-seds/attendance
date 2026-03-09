@@ -417,15 +417,21 @@ function toggleMeetingModal(show) {
 function toggleVenueLabel(mode) {
     const label = document.getElementById('venue-label');
     const input = document.getElementById('schedule-venue');
+
     if (mode === 'Online') {
         label.innerText = "Meeting Link (Google Meet/Teams)";
-        input.placeholder = "Paste meeting URL here...";
+        input.placeholder = "https://meet.google.com/xxx-xxxx-xxx";
+        input.type = "url"; // Changes input behavior to URL mode
+        input.setAttribute("pattern", "https://.*"); // Requires https
+        input.title = "Please enter a valid URL starting with https://";
     } else {
         label.innerText = "Venue";
         input.placeholder = "e.g. Aero Seminar Hall";
+        input.type = "text"; // Switches back to regular text
+        input.removeAttribute("pattern");
+        input.removeAttribute("title");
     }
 }
-
 
 
 const MEETING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6HkWXcJW_EgiCK0WTfO1do1gv7HWwp8ZogNMECAQyHxDstgVHhJ7ayWxS9Mba8cO--g/exec";
@@ -572,5 +578,6 @@ async function cancelMission(id) {
 }
 
 function logout() { localStorage.clear(); location.reload(); }
+
 
 
