@@ -420,7 +420,7 @@ function toggleVenueLabel(mode) {
 
     if (mode === 'Online') {
         label.innerText = "Meeting Link (Google Meet/Teams)";
-        input.placeholder = "https://meet.google.com/xxx-xxxx-xxx";
+        input.placeholder = "e.g. https://meet.google.com/xxx-xxxx-xxx";
         input.type = "url"; // Changes input behavior to URL mode
         input.setAttribute("pattern", "https://.*"); // Requires https
         input.title = "Please enter a valid URL starting with https://";
@@ -578,6 +578,7 @@ async function cancelMission(id) {
 }
 
 function logout() { localStorage.clear(); location.reload(); }
+
 
 
 
