@@ -517,7 +517,7 @@ async function fetchWeeklyMissions() {
             </p>
             
             ${isMyTeam ? `
-                <button class="btn btn-danger" style="width: 100%; margin-top: 15px; padding: 8px; font-size: 11px;" onclick="cancelMission('${m.id}')">Abort Mission</button>
+                <button class="btn btn-danger" style="width: 100%; margin-top: 15px; padding: 8px; font-size: 11px;" onclick="cancelMission('${m.id}')">Cancel Meeting</button>
             ` : `<small style="display:block; margin-top:12px; color:var(--muted); font-size:0.7rem; text-align:right;">Lead: ${m.by || 'Unknown'}</small>`}
         </div>`;
 });
@@ -578,6 +578,7 @@ async function cancelMission(id) {
 }
 
 function logout() { localStorage.clear(); location.reload(); }
+
 
 
 
