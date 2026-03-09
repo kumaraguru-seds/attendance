@@ -341,8 +341,8 @@ function toggleVenueLabel(mode) {
     }
 }
 
-// 1. CONFIGURATION - Update with your Web App URL from Apps Script
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtV5IU7e1IOmYPeW_p5xp-_0-qt3DERu3seL6EYemPBujBgDOEEn6mk6nxudDztP_Kmg/exec"; 
+// 1. CONFIGURATION - Replace with your Web App URL from Apps Script
+const MEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtV5IU7e1IOmYPeW_p5xp-_0-qt3DERu3seL6EYemPBujBgDOEEn6mk6nxudDztP_Kmg/exec"; 
 
 let pendingCancelId = null;
 
@@ -354,7 +354,7 @@ async function initLeadScheduler() {
     const section = document.getElementById('upcoming-meetings-section');
     if (section) section.classList.remove('hidden');
     
-    // Set the team name in the modal display
+    // Auto-fill the team name in the modal display for the Lead
     const teamDisplay = document.getElementById('schedule-team-display');
     if (teamDisplay) teamDisplay.value = currentUser.team;
     
@@ -369,7 +369,7 @@ async function loadUpcomingMeetings() {
     if (!listContainer) return;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
+        const res = await fetch(MEET_SCRIPT_URL, { 
             method: 'POST', 
             body: JSON.stringify({ action: "getUpcomingMeetings", team: currentUser.team }) 
         });
@@ -423,11 +423,12 @@ async function submitMeetingSchedule() {
         scheduledBy: currentUser.name
     };
 
+    // UI Feedback: Disable button during sync
     btn.innerText = "Syncing with HQ...";
     btn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
+        const res = await fetch(MEET_SCRIPT_URL, { 
             method: 'POST', 
             body: JSON.stringify(meetingData) 
         });
@@ -438,7 +439,7 @@ async function submitMeetingSchedule() {
             document.getElementById('meeting-form').reset();
             loadUpcomingMeetings(); // Refresh the list
         } else {
-            // This displays the "already scheduled" error from Apps Script
+            // Displays the double-booking error from Apps Script
             alert("⚠️ Mission Blocked: " + data.message);
         }
     } catch (e) { 
@@ -450,7 +451,7 @@ async function submitMeetingSchedule() {
 }
 
 /**
- * Popup Control Logic
+ * Custom Abort Popup Logic (No browser alerts)
  */
 function openCancelPopup(rowId) {
     pendingCancelId = rowId;
@@ -474,7 +475,7 @@ async function executeCancellation() {
     btn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
+        const res = await fetch(MEET_SCRIPT_URL, { 
             method: 'POST', 
             body: JSON.stringify({ action: "cancelMeeting", rowId: pendingCancelId }) 
         });
@@ -493,16 +494,8 @@ async function executeCancellation() {
 }
 
 /**
- * Global Listeners
+ * Helper: Toggles labels based on Meeting Mode
  */
-document.addEventListener('DOMContentLoaded', () => {
-    const abortBtn = document.getElementById('confirm-abort-btn');
-    if (abortBtn) {
-        abortBtn.addEventListener('click', executeCancellation);
-    }
-});
-
-// Helper for Venue Label Toggling
 function toggleVenueLabel(mode) {
     const label = document.getElementById('venue-label');
     const input = document.getElementById('schedule-venue');
@@ -514,3 +507,13 @@ function toggleVenueLabel(mode) {
         input.placeholder = "e.g. Aero Seminar Hall";
     }
 }
+
+/**
+ * Global Listeners
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const abortBtn = document.getElementById('confirm-abort-btn');
+    if (abortBtn) {
+        abortBtn.addEventListener('click', executeCancellation);
+    }
+});
