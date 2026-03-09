@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9F386t_AKbB69y0kLWuYbT17c3-RnHTuusFMekeVH_5LWFeYK0HNjKfWzEyVkjaVO/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWNMwRkMsjVL7MtHv-vVJd8tBjZwiymMJNyzLntH3tM2xHmsgooSOrINBFnDUkS4Dw/exec";
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('email').addEventListener('keydown', (e) => {
         if (e.key === "Enter") { e.preventDefault(); document.getElementById('password').focus(); }
@@ -578,6 +578,7 @@ async function cancelMission(id) {
 }
 
 function logout() { localStorage.clear(); location.reload(); }
+
 
 
 
