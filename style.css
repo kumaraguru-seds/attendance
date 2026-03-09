@@ -316,15 +316,22 @@ background:var(--danger);
 
 /* ABSENT REASON */
 
-.reason-input{
-width:100%;
-padding:8px;
-border:1px solid var(--danger);
-border-radius:6px;
-margin-top:6px;
-background:rgba(255,255,255,0.1);
-color:white;
-display:none;
+/* ABSENT REASON - Updated for White Text */
+.reason-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--danger);
+    border-radius: 6px;
+    margin-top: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white !important; /* Forces the typed text to be white */
+    display: none;
+    outline: none; /* Removes the default browser glow */
+}
+
+/* Optional: Make the placeholder text white with low opacity */
+.reason-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .student-card.absent .reason-input{
@@ -643,5 +650,6 @@ input[type="radio"] {
     padding: 10px;
     border-bottom: 1px solid var(--border);
 }
+
 
 
