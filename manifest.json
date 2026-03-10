@@ -9,13 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "src/img/SEDS3.png",
+      "src": "src/img/SEDS.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "src/img/SEDS3.png",
+      "src": "src/img/SEDS.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
