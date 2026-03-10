@@ -434,7 +434,7 @@ function toggleVenueLabel(mode) {
 }
 
 
-const MEETING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwGbsWYyC1c3klRqpFrN3lymBx1oXNU7kp8AZe4RJzgwUj5E6g26nJgNbrfZWKsWDfGg/exec";
+const MEETING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6HkWXcJW_EgiCK0WTfO1do1gv7HWwp8ZogNMECAQyHxDstgVHhJ7ayWxS9Mba8cO--g/exec";
 
 // --- LEAD DASHBOARD ---
 async function loadLeadDashboard() {
@@ -602,69 +602,4 @@ function showUpdateBar() {
     newWorker.postMessage({ action: 'skipWaiting' });
     window.location.reload();
   }
-}
-
-
-const SEDS_ICON = 'https://attendance.kumaraguruseds.space/src/img/SEDS3.png';
-
-async function handleLogin() {
-    // ASK FOR PERMISSION ON CLICK
-    if ("Notification" in window) {
-        await Notification.requestPermission();
-    }
-
-    const usernameInput = document.getElementById('email').value; 
-    const pass = document.getElementById('password').value;
-    const btn = document.querySelector('.btn-primary');
-
-    if(!usernameInput || !pass) return;
-    btn.innerText = "Authenticating..."; btn.disabled = true;
-
-    try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            body: JSON.stringify({ action: "login", username: usernameInput, password: pass }) 
-        });
-        const data = await res.json();
-        if (data.status === "success") {
-            currentUser = data;
-            localStorage.setItem('seds_user', JSON.stringify(currentUser));
-            initApp();
-            await loadPortalData(); // Loads meetings and sets timers
-        }
-    } catch (e) { console.log("Login Error"); }
-    btn.innerText = "Secure Login"; btn.disabled = false;
-}
-
-async function runNotificationEngine(meetings, user) {
-    const now = new Date().getTime();
-    meetings.forEach(m => {
-        const isMyTeam = (m.team === user.team);
-        const isAdmin = (user.roll === "AdminPro2.0");
-        if (!isMyTeam && !isAdmin) return;
-
-        // Time Parsing
-        const [time, mod] = m.startTime.split(' ');
-        let [h, min] = time.split(':');
-        if (h === '12') h = '00';
-        if (mod === 'PM') h = parseInt(h) + 12;
-        const mtgTime = new Date(`${m.date}T${h}:${min}:00`).getTime();
-
-        [30, 10, 1].forEach(mins => {
-            const delay = (mtgTime - (mins * 60 * 1000)) - now;
-            if (delay > 0) {
-                navigator.serviceWorker.controller.postMessage({
-                    action: 'scheduleNotify',
-                    title: `🚀 SEDS: ${m.team}`,
-                    delay: delay,
-                    options: {
-                        body: `${mins}m to go at ${m.venue}.`,
-                        icon: SEDS_ICON,
-                        data: { meetingId: m.id },
-                        actions: isMyTeam ? [{ action: 'started', title: '✅ Started' }] : []
-                    }
-                });
-            }
-        });
-    });
 }
