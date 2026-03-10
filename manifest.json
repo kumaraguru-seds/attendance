@@ -1,5 +1,5 @@
 {
-  "name": "SEDS Attendance Portal",
+  "name": "SEDS",
   "short_name": "SEDS",
   "description": "Internal Mission Control for Kumaraguru SEDS Attendance and Scheduling.",
   "start_url": "./index.html",
