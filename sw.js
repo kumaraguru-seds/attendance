@@ -20,6 +20,7 @@ self.addEventListener('install', (e) => {
   );
 });
 
+
 // Activate: Clean up old caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(self.clients.claim());
