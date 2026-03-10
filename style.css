@@ -48,15 +48,7 @@ z-index:-1;
 .hidden{
 display:none!important;
 }
-
-.login-logo {
-        width: 100px;           /* Adjust size as needed */
-        height: auto;
-        display: block;
-        margin: 0 auto 20px;    /* Centers the logo and adds space below it */
-        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)); /* Optional: subtle glow */
-    }
-
+
 /* UNIVERSAL GLASS CONTAINER */
 
 .glass-container{
