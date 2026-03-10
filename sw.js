@@ -1,5 +1,5 @@
 // sw.js - SEDS Attendance Portal Update Logic
-const CACHE_NAME = 'seds-attendance-v2';
+const CACHE_NAME = 'seds-attendance-v3';
 
 const FILES_TO_CACHE = [
   './', 
