@@ -1,28 +1,61 @@
-const CACHE_NAME = 'seds-portal-v3';
-const ASSETS = [
+const CACHE_NAME = 'seds-mission-control-v1';
+const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './src/img/SEDS3.png',
-  // Add your CSS and JS file paths here so they work offline
-  './style.css', 
-  './script.js'
+  './style.css',
+  './script.js',
+  './manifest.json',
+  './src/img/SEDS3.png' // Your logo for the splash screen
 ];
 
-// Install Service Worker
+// INSTALL: Pre-cache all essential assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      console.log('Mission Control: Pre-caching System Assets');
+      return cache.addAll(ASSETS_TO_CACHE);
     })
   );
+  // Force the waiting service worker to become the active service worker
+  self.skipWaiting();
 });
 
-// Fetch Assets from Cache
+// ACTIVATE: Clean up old caches if the version changes
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log('Mission Control: Purging Obsolete Cache');
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  return self.clients.claim();
+});
+
+// FETCH: Network-First Strategy with Cache Fallback
+// This ensures data stays fresh but the app still opens offline
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
 
+// NOTIFICATION: Handle incoming push events (Optional for future)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New Mission Update Available',
+    icon: './src/img/SEDS3.png',
+    badge: './src/img/SEDS3.png',
+    vibrate: [100, 50, 100]
+  };
+  event.waitUntil(
+    self.registration.showNotification('SEDS Attendance Portal', options)
+  );
+});
