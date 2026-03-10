@@ -552,7 +552,7 @@ async function submitMeetingSchedule() {
         const data = await res.json();
         
         if (data.status === "success") {
-            alert("Mission Locked! New meeting scheduled.");
+            alert("Meeting Locked! New meeting scheduled. Inform your teammates through WhatsApp...");
             toggleMeetingModal(false);
             fetchWeeklyMissions(); 
         } else {
@@ -571,7 +571,7 @@ async function cancelMission(id) {
         const res = await fetch(MEETING_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "cancelMeeting", id: id }) });
         const data = await res.json();
         if (data.status === "success") {
-            alert("Mission Aborted.");
+            alert("Meeting Cancelled. Inform your teammates through WhatsApp...");
             fetchWeeklyMissions();
         }
     } catch (e) { alert("Abort failed."); }
