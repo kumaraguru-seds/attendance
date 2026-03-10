@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seds-mission-control-v1';
+const CACHE_NAME = 'seds-mission-control-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
