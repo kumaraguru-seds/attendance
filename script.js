@@ -579,22 +579,27 @@ async function cancelMission(id) {
 
 function logout() { localStorage.clear(); location.reload(); }
 
+let newWorker;
+
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-        // Check for updates whenever the page is loaded/active
-        reg.addEventListener('updatefound', () => {
-            const newWorker = reg.installing;
-            newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // New content is available; notify the user or auto-reload
-                    if (confirm("New SEDS Mission Control update available. Reload now?")) {
-                        newWorker.postMessage('SKIP_WAITING');
-                        window.location.reload();
-                    }
-                }
-            });
-        });
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        // Check if the new service worker has finished installing
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // THIS IS WHAT SHOWS THE CONFIRM POPUP
+          showUpdateBar();
+        }
+      });
     });
+  });
 }
 
-
+function showUpdateBar() {
+  const updateConfirmed = confirm("New SEDS Mission Control update available. Reload now to apply changes?");
+  if (updateConfirmed) {
+    newWorker.postMessage({ action: 'skipWaiting' });
+    window.location.reload();
+  }
+}
