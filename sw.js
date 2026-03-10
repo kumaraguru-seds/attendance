@@ -1,46 +1,70 @@
-const CACHE_NAME = 'seds-mission-control-v1';
-const ASSETS_TO_CACHE = [
-  './',
+// sw.js - Service Worker for SEDS Attendance Portal (Network-First)
+
+// 1. Define the cache name and the essential files for the initial install.
+// We use v2 to ensure any previous "urlz" or "v1" caches are cleared.
+const CACHE_NAME = 'seds-attendance-v2';
+
+const FILES_TO_CACHE = [
+  './', 
   './index.html',
   './style.css',
   './script.js',
-  './manifest.json',
-  './src/img/SEDS3.png' // Updated to SEDS3.png
+  './src/img/SEDS3.png', // Updated logo path
+  './manifest.json'
 ];
 
-// INSTALL: Pre-cache the white splash screen assets
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Mission Control: Caching SEDS3 System Assets');
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+// --- Install Event: Pre-caching critical assets ---
+self.addEventListener('install', (e) => {
+  console.log('[SW] Installing SEDS Mission Control...');
   self.skipWaiting();
+
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[SW] Pre-caching SEDS3 assets.');
+      return cache.addAll(FILES_TO_CACHE);
+    }),
+  );
 });
 
-// ACTIVATE: Clear old versions to save phone storage
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            console.log('Mission Control: Purging Obsolete Cache');
-            return caches.delete(cache);
-          }
-        })
-      );
+// --- Activate Event: Immediate control and old cache cleanup ---
+self.addEventListener('activate', (e) => {
+  console.log('[SW] Activating Systems and claiming clients.');
+  e.waitUntil(self.clients.claim());
+
+  e.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(keyList.map((key) => {
+        // Deletes any old caches (like the previous urlz-site-store)
+        if (key !== CACHE_NAME) {
+          console.log('[SW] Deleting obsolete cache:', key);
+          return caches.delete(key);
+        }
+      }));
     })
   );
-  return self.clients.claim();
 });
 
-// FETCH: Serve from cache if offline, otherwise use network
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+// --- Fetch Event: Network-First Strategy ---
+// This strategy ensures the app stays updated with your latest GitHub pushes.
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    fetch(e.request)
+      .then((response) => {
+        // If network is successful, update the cache with the new version
+        const responseClone = response.clone();
+        
+        caches.open(CACHE_NAME).then((cache) => {
+          // Only cache successful GET requests from your domain
+          if (e.request.method === "GET" && response.status === 200 && e.request.url.indexOf('http') === 0) {
+              cache.put(e.request, responseClone);
+          }
+        });
+        return response;
+      })
+      .catch(() => {
+        // If the user is offline (Network fails), fall back to the cached files.
+        console.log('[SW] Offline Mode: Falling back to cached SEDS assets.');
+        return caches.match(e.request);
+      }),
   );
 });
