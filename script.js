@@ -579,6 +579,14 @@ async function cancelMission(id) {
 
 function logout() { localStorage.clear(); location.reload(); }
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Mission Control: Service Worker Registered'))
+      .catch(err => console.log('Mission Control: Registration Failed', err));
+  });
+}
+
 
 
 
