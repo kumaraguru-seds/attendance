@@ -580,14 +580,21 @@ async function cancelMission(id) {
 function logout() { localStorage.clear(); location.reload(); }
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(registration => {
-        console.log('Mission Control: SW Registered successfully');
-      })
-      .catch(err => {
-        console.error('Mission Control: SW Registration failed', err);
-      });
-  });
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+        // Check for updates whenever the page is loaded/active
+        reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New content is available; notify the user or auto-reload
+                    if (confirm("New SEDS Mission Control update available. Reload now?")) {
+                        newWorker.postMessage('SKIP_WAITING');
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    });
 }
+
 
