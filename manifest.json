@@ -4,8 +4,8 @@
   "description": "Internal Mission Control for Kumaraguru SEDS Attendance and Scheduling.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0d1e3a",
-  "theme_color": "#4da6ff",
+  "background_color": "#ffffff",
+  "theme_color": "#000",
   "icons": [
     {
       "src": "src/img/SEDS3.png",
