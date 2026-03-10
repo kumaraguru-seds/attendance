@@ -582,8 +582,12 @@ function logout() { localStorage.clear(); location.reload(); }
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Mission Control: Service Worker Registered'))
-      .catch(err => console.log('Mission Control: Registration Failed', err));
+      .then(registration => {
+        console.log('Mission Control: SW Registered successfully');
+      })
+      .catch(err => {
+        console.error('Mission Control: SW Registration failed', err);
+      });
   });
 }
 
