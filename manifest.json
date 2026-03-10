@@ -1,10 +1,10 @@
 {
-  "name": "SEDS",
-  "short_name": "SEDS",
-  "description": "Internal Mission Control for Kumaraguru SEDS Attendance and Scheduling.",
+  "name": "SEDS Attendance Portal",
+  "short_name": "SEDS Portal",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#ffffff", 
+  "theme_color": "#0d1e3a",
   "icons": [
     {
       "src": "src/img/SEDS3.png",
@@ -12,7 +12,7 @@
       "type": "image/png"
     },
     {
-      "src": "src/img/SEDS3.png",
+      "src": "src/img/SEDS.png",
       "sizes": "512x512",
       "type": "image/png"
     }
