@@ -650,21 +650,4 @@ input[type="radio"] {
     padding: 10px;
     border-bottom: 1px solid var(--border);
 }
-
-/* Custom class to trigger the logo entrance */
-.logo-appear {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-}
-
-/* Class to hide the splash and show content */
-.fade-out-splash {
-    opacity: 0;
-    visibility: hidden;
-}
-
-.show-content {
-    opacity: 1 !important;
-}
-
-
+
