@@ -434,7 +434,7 @@ function toggleVenueLabel(mode) {
 }
 
 
-const MEETING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhYKYFtT0Hjn8SFLu2XUOHAuiLlxTte_VWMy5-LN2H4fIgMe_JSbucTM4nbFLlctA_tA/exec";
+const MEETING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznasVEjsIC2BQus53B_l-R007-MAuNW2qgpf_RvRzn4b2fiM_9FRHkHoKqguAs7xHH/exec";
 
 // --- LEAD DASHBOARD ---
 async function loadLeadDashboard() {
@@ -603,5 +603,6 @@ function showUpdateBar() {
     window.location.reload();
   }
 }
+
 
 
