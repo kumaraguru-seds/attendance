@@ -588,7 +588,27 @@ if ('serviceWorker' in navigator) {
 }
 
 
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    const logo = document.getElementById('splash-logo');
+    const mainContent = document.getElementById('main-content');
 
+    // 1. Make the logo fade in slightly after the white screen appears
+    setTimeout(() => {
+        logo.classList.add('logo-appear');
+    }, 200);
 
+    // 2. Wait for 2.5 seconds (adjust to match your video preference)
+    setTimeout(() => {
+        // Fade out the white splash
+        splash.classList.add('fade-out-splash');
+        
+        // Simultaneously fade in your Vision/Mission content
+        mainContent.classList.add('show-content');
+        
+        // Completely remove splash from DOM after transition to save memory
+        setTimeout(() => splash.remove(), 800);
+    }, 2500);
+});
 
 
