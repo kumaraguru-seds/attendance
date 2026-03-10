@@ -1,6 +1,6 @@
 {
   "name": "SEDS Attendance Portal",
-  "short_name": "SEDS Portal",
+  "short_name": "SEDS Attendance Portal",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff", 
