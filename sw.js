@@ -2,7 +2,7 @@
 
 // 1. Define the cache name and the essential files for the initial install.
 // We use v2 to ensure any previous "urlz" or "v1" caches are cleared.
-const CACHE_NAME = 'seds-attendance-v2';
+const CACHE_NAME = 'seds-attendance-v1';
 
 const FILES_TO_CACHE = [
   './', 
