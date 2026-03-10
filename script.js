@@ -566,7 +566,7 @@ async function submitMeetingSchedule() {
 }
 
 async function cancelMission(id) {
-    if (!confirm("Confirm Mission Abort?")) return;
+    if (!confirm("Confirm Cancel Meeting?")) return;
     try {
         const res = await fetch(MEETING_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "cancelMeeting", id: id }) });
         const data = await res.json();
