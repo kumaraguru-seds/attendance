@@ -1,26 +1,25 @@
-const CACHE_NAME = 'seds-mission-control-v2';
+const CACHE_NAME = 'seds-mission-control-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
   './script.js',
   './manifest.json',
-  './src/img/SEDS3.png' // Your logo for the splash screen
+  './src/img/SEDS3.png' // Updated to SEDS3.png
 ];
 
-// INSTALL: Pre-cache all essential assets
+// INSTALL: Pre-cache the white splash screen assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Mission Control: Pre-caching System Assets');
+      console.log('Mission Control: Caching SEDS3 System Assets');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  // Force the waiting service worker to become the active service worker
   self.skipWaiting();
 });
 
-// ACTIVATE: Clean up old caches if the version changes
+// ACTIVATE: Clear old versions to save phone storage
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -37,25 +36,11 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim();
 });
 
-// FETCH: Network-First Strategy with Cache Fallback
-// This ensures data stays fresh but the app still opens offline
+// FETCH: Serve from cache if offline, otherwise use network
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
-  );
-});
-
-// NOTIFICATION: Handle incoming push events (Optional for future)
-self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data ? event.data.text() : 'New Mission Update Available',
-    icon: './src/img/SEDS3.png',
-    badge: './src/img/SEDS3.png',
-    vibrate: [100, 50, 100]
-  };
-  event.waitUntil(
-    self.registration.showNotification('SEDS Attendance Portal', options)
   );
 });
