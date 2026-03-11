@@ -185,7 +185,7 @@ function toggle(i, status) {
 
 async function submitAttendance() {
     const discussion = document.getElementById('discussion-text').value;
-    if (!discussion) return alert("Enter discussion points.");
+    if (!discussion) return alert("Enter what was discussed today?");
     const records = teamMembers.map((m, i) => ({
         name: m.name, roll: m.roll, status: document.getElementById(`card-${i}`).dataset.status === 'P' ? 'Present' : 'Absent',
         reason: document.getElementById(`reason-${i}`).value
