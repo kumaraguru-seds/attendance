@@ -275,7 +275,7 @@ Daily time trigger: sendMeetingEmails()  →  reminders for today / tomorrow
 ## <a id="project-structure"></a>📁 Project Structure
 
 ```
-kumaraguru_seds_attendance_portal/
+attendance/
 │
 ├── index.html                  # Main app shell (login + all dashboards in one page)
 ├── style.css                   # All CSS — glassmorphism, cards, tags, star animations
@@ -367,7 +367,7 @@ This is an internal club tool, but contributions are welcome.
 
 ```bash
 # Fork and clone
-git clone https://github.com/manikandan-n-07/kumaraguru_seds_attendance_portal.git
+git clone https://github.com/kumaraguru-seds/attendance.git
 
 # Create a branch
 git checkout -b fix/your-feature-name
